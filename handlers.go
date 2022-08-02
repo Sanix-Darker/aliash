@@ -30,8 +30,8 @@ func InstallHandler(c *gin.Context) {
 
 func GetHandler(c *gin.Context) {
 
-	installScript, err := os.ReadFile("./echo.sh")
+	echoScript, err := os.ReadFile("./echo.sh")
 	Must(err)
 
-	c.Data(http.StatusOK, "text/plain", installScript)
+	c.Data(http.StatusOK, "text/plain", echoScript)
 }
