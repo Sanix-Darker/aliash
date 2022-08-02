@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,6 +27,28 @@ func InstallHandler(c *gin.Context) {
 	Must(err)
 
 	c.Data(http.StatusOK, "text/plain", installScript)
+}
+
+func CreateAliasesHandler(c *gin.Context) {
+	var as Aliases
+
+	Must(c.BindJSON(&as))
+
+	as.CreatedAt = time.Now()
+	as.UpdatedAt = time.Now()
+
+	if err := createAliases(&as); err != nil {
+		c.JSON(http.StatusForbidden, gin.H{
+			"error": err,
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"uid":         as.Uid,
+		"url":         as.Url,
+		"description": as.Description,
+		"created_at":  as.CreatedAt,
+	})
 }
 
 func GetHandler(c *gin.Context) {

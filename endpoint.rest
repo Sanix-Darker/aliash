@@ -1,0 +1,29 @@
+// Default
+http://127.0.0.1:5000
+
+// Default buffer scope
+-L
+-s
+--connect-timeout 10
+
+// Default headers
+Accept: **/**
+--
+
+--
+# to get the installation script
+GET /
+
+--
+# to get the the saved alias 
+GET /uid
+
+--
+Content-Type: application/json; charset=utf-8
+POST /new
+{
+  "uid": "another_clean_hash_aaaeeddr4522",
+  "url": "http://gist.comm",
+  "description": "test"
+}
+
