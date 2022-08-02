@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # The bash script that will get the key of the
@@ -58,7 +57,7 @@ _check_command(){
 }
 
 _count_down(){
-    sec=10
+    sec=15
     while [ $sec -ge 0 ]; do
         echo -ne "$GREEN[-] The script will be started in "$BRED$sec$COLOROFF" (Crtl+C to stop) \r"
         let "sec=sec-1"
