@@ -12,6 +12,8 @@ HOST="http://127.0.0.1:5000"
 # THe temporary file where the content of bash snippets will be saved
 TMP="./tmp"
 
+TMP_HASH=""
+
 # the colors list
 if [[ -t 1 ]]; then
     COLOROFF='\033[0m'       # TEXT RESET
@@ -58,7 +60,7 @@ _check_command(){
 _count_down(){
     sec=10
     while [ $sec -ge 0 ]; do
-        echo -ne "$GREEN[-] The script will be started in "$BRED$sec$COLOROFF" (Crtl+C to stop).\r"
+        echo -ne "$GREEN[-] The script will be started in "$BRED$sec$COLOROFF" (Crtl+C to stop) \r"
         let "sec=sec-1"
         sleep 1
     done
@@ -73,12 +75,14 @@ run_it(){
     cat ./tmp
     echo -e $COLOROFF
     echo "--------------------------------------------------------------------------------"
+    echo -e $BLUE**SHA512: ${TMP_HASH:0:70}$COLOROFF
+    echo "--------------------------------------------------------------------------------"
 
     _count_down
 
     while read p; do
-        echo -e "$BYELLOW$p$COLOROFF"
-        $(echo $p)
+        [[  ${#p} > 1 ]] && echo -e "|>  $BYELLOW$p$COLOROFF"
+        echo -e "|  $($p)"
         [[ $? != 0 ]] && echo -e "$RED[x] Error executing  : $BRED$p$COLOROFF"
         sleep 0.5
     done < $TMP
@@ -89,16 +93,20 @@ run_it(){
 
 main(){
     # We check if some required programs are availables
-    for cc in "curl" "cat" "echo" "bash" "let";do
+    for cc in "curl" "sha512sum" ;do
         _check_command $cc
     done
 
     # we save in a tmp file
     curl -sSL $1 | tr "\n" "\\n" > $TMP
-    # We run the command
-    run_it
-    # Show an error message in case of bad id provided
-    [[ $? != 0 ]] && echo -e "[x] An error occured, please check your link again."
+    if [[ $? == 0 ]]; then
+        TMP_HASH=$(cat $TMP | sha512sum)
+        # We run the command
+        run_it
+    else
+        # Show an error message in case of bad id provided
+        echo -e "[x] An error occured, please check your link again."
+    fi
 }
 # We execute the main method
 main "$HOST/$1"
