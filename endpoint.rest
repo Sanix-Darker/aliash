@@ -22,7 +22,7 @@ GET /this-is4e823460b7
 Content-Type: application/json
 POST /new
 {
-  "title": "This is an Example of echo",
-  "content": "#!/bin/bash\n\necho test\n\nread test"
+  "title": "We apt update",
+  "content": "sudo apt update -y\n\n"
 }
 

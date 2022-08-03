@@ -71,7 +71,7 @@ run_it(){
     echo -e "$GREEN[-] Content:$COLOROFF"
     echo "--------------------------------------------------------------------------------"
     echo -e $BWHITE
-    cat ./tmp
+    cat $TMP
     echo -e $COLOROFF
     echo "--------------------------------------------------------------------------------"
     echo -e $BLUE**SHA512: ${TMP_HASH:0:70}$COLOROFF
@@ -79,14 +79,17 @@ run_it(){
 
     _count_down
 
-    while read p; do
-        [[  ${#p} > 1 ]] && echo -e "|>  $BYELLOW$p$COLOROFF"
-        echo -e "|  $($p)"
-        [[ $? != 0 ]] && echo -e "$RED[x] Error executing  : $BRED$p$COLOROFF"
+    while read line; do
+        [[  ${#line} > 1 ]] && echo -e "|>  $BYELLOW$line$COLOROFF"
+
+        # we execute the corresponding line
+        bash -c "$line"
+
+        [[ $? != 0 ]] && echo -e "$RED[x] Error executing  : $BRED$line$COLOROFF"
         sleep 0.5
     done < $TMP
 
-    # we remove the tmp file created to store the file
+    # We clean the tmp
     rm -rf $TMP
 }
 
