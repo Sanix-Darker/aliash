@@ -48,38 +48,41 @@ func CreateAliasesHandler(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Your content is > 300",
 		})
+	} else {
+		as.Title = TruncateText(as.Title, 70)
+
+		// We should search for the same title and the content in the database
+		// and refuse to save if there is already something similar in the database
+		filter := bson.M{"$and": []interface{}{bson.M{"title": as.Title}, bson.M{"content": as.Content}}}
+
+		aliases, _ := filterAliasessBy(filter)
+
+		if len(aliases) > 0 {
+			c.JSON(http.StatusAlreadyReported, gin.H{
+				"error": "An alias already exist for this title and this content",
+			})
+		} else {
+			as.Hash512 = ShaIt(as.Content)
+			as.Uid = TruncateText(slug.Make(as.Title), 7) + TruncateText(as.Hash512, 10)
+			as.CreatedAt = time.Now()
+			as.UpdatedAt = time.Now()
+
+			if err := createAliases(&as); err != nil {
+				c.JSON(http.StatusForbidden, gin.H{
+					"error": err,
+				})
+			} else {
+				c.JSON(http.StatusOK, gin.H{
+					"uid":        as.Uid,
+					"title":      as.Title,
+					"hash":       as.Hash512,
+					"created_at": as.CreatedAt,
+				})
+			}
+		}
+
 	}
 
-	as.Title = TruncateText(as.Title, 70)
-
-	// We should search for the same title and the content in the database
-	// and refuse to save if there is already something similar in the database
-	filter := bson.D{{"title", as.Title}, {"content", as.Content}}
-	aliases, err := filterAliasessBy(filter)
-
-	if err != nil || len(aliases) > 0 {
-		c.JSON(http.StatusAlreadyReported, gin.H{
-			"error": "An alias already exist for this title and this content",
-		})
-	}
-
-	as.Hash512 = ShaIt(as.Content)
-	as.Uid = TruncateText(slug.Make(as.Title), 7) + TruncateText(as.Hash512, 10)
-	as.CreatedAt = time.Now()
-	as.UpdatedAt = time.Now()
-
-	if err := createAliases(&as); err != nil {
-		c.JSON(http.StatusForbidden, gin.H{
-			"error": err,
-		})
-	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"uid":        as.Uid,
-		"title":      as.Title,
-		"hash":       as.Hash512,
-		"created_at": as.CreatedAt,
-	})
 }
 
 func GetHandler(c *gin.Context) {
