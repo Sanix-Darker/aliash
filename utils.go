@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crypto/sha512"
+	"encoding/hex"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -24,6 +26,22 @@ func GetRequest(requestURL string) []byte {
 	MustOrExit(err)
 
 	return resBody
+}
+
+// TruncateText to safely truncate string depending on the max
+// integer passed
+func TruncateText(s string, max int) string {
+	if max > len(s) {
+		return s
+	}
+	return s[:max]
+}
+
+func ShaIt(s string) string {
+	h := sha512.New()
+	h.Write([]byte(s))
+
+	return hex.EncodeToString(h.Sum(nil))
 }
 
 // Must just to raise an error if there is one

@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gosimple/slug"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -36,6 +37,34 @@ func CreateAliasesHandler(c *gin.Context) {
 
 	Must(c.BindJSON(&as))
 
+	if len(as.Content) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Your content should not be empty",
+		})
+	}
+
+	// We should check here if the user is logged, then allow content <= 1000
+	if len(as.Content) > 300 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Your content is > 300",
+		})
+	}
+
+	as.Title = TruncateText(as.Title, 70)
+
+	// We should search for the same title and the content in the database
+	// and refuse to save if there is already something similar in the database
+	filter := bson.D{{"title", as.Title}, {"content", as.Content}}
+	aliases, err := filterAliasessBy(filter)
+
+	if err != nil || len(aliases) > 0 {
+		c.JSON(http.StatusAlreadyReported, gin.H{
+			"error": "An alias already exist for this title and this content",
+		})
+	}
+
+	as.Hash512 = ShaIt(as.Content)
+	as.Uid = TruncateText(slug.Make(as.Title), 7) + TruncateText(as.Hash512, 10)
 	as.CreatedAt = time.Now()
 	as.UpdatedAt = time.Now()
 
@@ -46,10 +75,10 @@ func CreateAliasesHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"uid":         as.Uid,
-		"url":         as.Url,
-		"description": as.Description,
-		"created_at":  as.CreatedAt,
+		"uid":        as.Uid,
+		"title":      as.Title,
+		"hash":       as.Hash512,
+		"created_at": as.CreatedAt,
 	})
 }
 
@@ -61,25 +90,19 @@ func GetHandler(c *gin.Context) {
 		aliases, err := filterAliasessBy(filter)
 
 		if err != nil || len(aliases) == 0 {
-
 			log.Printf("%s", err)
+
 			c.JSON(http.StatusNotFound, gin.H{
 				"error": "No aliases found for this uid !",
 			})
 		} else {
-			url := aliases[0].Url
+			content := aliases[0].Content
 
-			if len(url) > 0 {
-				rawScript := GetRequest(aliases[0].Url)
-
-				c.Data(http.StatusOK, "text/plain", rawScript)
-			} else {
-				c.JSON(http.StatusNotAcceptable, gin.H{
-					"error": "The url is not valid for this alias !",
-				})
-			}
+			c.Data(http.StatusOK, "text/plain", []byte(content))
 		}
 	} else {
+		log.Printf("[x] uid is empty !")
+
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "You need to provide the uid parameter !",
 		})

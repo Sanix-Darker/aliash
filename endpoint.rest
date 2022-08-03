@@ -16,14 +16,13 @@ GET /
 
 --
 # to get the the saved alias 
-GET /copy_recursivelly001
+GET /this-is4e823460b7
 
 --
-Content-Type: application/json; charset=utf-8
+Content-Type: application/json
 POST /new
 {
-  "uid": "copy_recursivelly001",
-  "url": "https://gist.githubusercontent.com/Sanix-Darker/47c083d929836fa334b1f4b5398aaab7/raw/9f62558614909bcb90daa9d6183d75adb6ca0d65/copy_recursively.sh",
-  "description": "A simple copy alias"
+  "title": "This is an Example of echo",
+  "content": "#!/bin/bash\n\necho test\n\nread test"
 }
 
