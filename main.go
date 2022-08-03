@@ -13,7 +13,7 @@ func main() {
 	// routes
 	router.GET("/", InstallHandler)
 	router.POST("/new", CreateAliasesHandler)
-	router.GET("/:id", GetHandler)
+	router.GET("/:uid", GetHandler)
 
 	router.Run("localhost:" + os.Getenv("PORT"))
 }

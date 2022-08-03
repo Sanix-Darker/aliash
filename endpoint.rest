@@ -2,8 +2,8 @@
 http://127.0.0.1:5000
 
 // Default buffer scope
--L
 -s
+-L
 --connect-timeout 10
 
 // Default headers
@@ -16,14 +16,14 @@ GET /
 
 --
 # to get the the saved alias 
-GET /uid
+GET /copy_recursivelly001
 
 --
 Content-Type: application/json; charset=utf-8
 POST /new
 {
-  "uid": "another_clean_hash_aaaeeddr4522",
-  "url": "http://gist.comm",
-  "description": "test"
+  "uid": "copy_recursivelly001",
+  "url": "https://gist.githubusercontent.com/Sanix-Darker/47c083d929836fa334b1f4b5398aaab7/raw/9f62558614909bcb90daa9d6183d75adb6ca0d65/copy_recursively.sh",
+  "description": "A simple copy alias"
 }
 
