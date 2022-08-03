@@ -55,7 +55,7 @@ func CreateAliasesHandler(c *gin.Context) {
 		// and refuse to save if there is already something similar in the database
 		filter := bson.M{"$and": []interface{}{bson.M{"title": as.Title}, bson.M{"content": as.Content}}}
 
-		aliases, _ := filterAliasessBy(filter)
+		aliases, _ := filterAliasesBy(filter)
 
 		if len(aliases) > 0 {
 			c.JSON(http.StatusAlreadyReported, gin.H{
@@ -85,12 +85,18 @@ func CreateAliasesHandler(c *gin.Context) {
 
 }
 
+func GetAllHandler(c *gin.Context) {
+	aliases := getAllAliases()
+
+	c.JSON(http.StatusOK, aliases)
+}
+
 func GetHandler(c *gin.Context) {
 	uid := c.Param("uid")
 
 	if len(uid) > 0 {
 		filter := bson.D{{"uid", uid}}
-		aliases, err := filterAliasessBy(filter)
+		aliases, err := filterAliasesBy(filter)
 
 		if err != nil || len(aliases) == 0 {
 			log.Printf("%s", err)

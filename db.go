@@ -35,15 +35,27 @@ func createAliases(as *Aliases) error {
 
 // getAllAliases To get all aliases
 // passing bson.D{{}} matches all documents in the collection
-func getAllAliases() ([]*Aliases, error) {
+func getAllAliases() []*Aliases {
 	filter := bson.D{{}}
-	return filterAliasessBy(filter)
+	aliases, err := filterAliasesBy(filter)
+	Must(err)
+
+	var sanitizedAliases []*Aliases
+	for _, as := range aliases {
+		sanitizedAliases = append(sanitizedAliases, &Aliases{
+			Uid:     as.Uid,
+			Title:   as.Title,
+			Content: as.Content,
+		})
+	}
+
+	return sanitizedAliases
 }
 
 // getAliasess to get aliases from mongodb
 // with a given filter sjon filter
 // A slice of aliases for storing the decoded documents
-func filterAliasessBy(filter interface{}) ([]*Aliases, error) {
+func filterAliasesBy(filter interface{}) ([]*Aliases, error) {
 	var aliases []*Aliases
 
 	cur, err := collection.Find(ctx, filter)

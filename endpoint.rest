@@ -15,6 +15,10 @@ Accept: **/**
 GET /
 
 --
+# to get all saved aliases
+GET /all
+
+--
 # to get the the saved alias 
 GET /this-is4e823460b7
 
