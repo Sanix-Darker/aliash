@@ -41,12 +41,7 @@ func getAllAliases() []*Aliases {
 
 	var sanitizedAliases []*Aliases
 	for _, as := range aliases {
-		sanitizedAliases = append(sanitizedAliases, &Aliases{
-			Uid:     as.Uid,
-			Title:   as.Title,
-			Content: as.Content,
-			Hash512: as.Hash512,
-		})
+		sanitizedAliases = append(sanitizedAliases, as)
 	}
 
 	return sanitizedAliases
