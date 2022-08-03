@@ -14,7 +14,7 @@ type Aliases struct {
 	Title     string             `bson:"title,omitempty"`
 	Uid       string             `bson:"uid"`
 	Content   string             `bson:"content,omitempty"`
-	Hash512   string             `bson:"hash"`
+	Hash512   string             `bson:"hash,omitempty"`
 }
 
 // Link define the link between analias an it user

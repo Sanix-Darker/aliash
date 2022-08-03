@@ -37,8 +37,7 @@ func createAliases(as *Aliases) error {
 // passing bson.D{{}} matches all documents in the collection
 func getAllAliases() []*Aliases {
 	filter := bson.D{{}}
-	aliases, err := filterAliasesBy(filter)
-	Must(err)
+	aliases, _ := filterAliasesBy(filter)
 
 	var sanitizedAliases []*Aliases
 	for _, as := range aliases {
@@ -46,6 +45,7 @@ func getAllAliases() []*Aliases {
 			Uid:     as.Uid,
 			Title:   as.Title,
 			Content: as.Content,
+			Hash512: as.Hash512,
 		})
 	}
 

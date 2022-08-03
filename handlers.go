@@ -11,12 +11,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-// EmptyHandler ideal for HEAD calls
-func EchoHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
-}
-
 func HomeHandler(c *gin.Context) {
+	c.Writer.Header().Set("Content-Type", "application/json")
 	c.JSON(http.StatusOK, gin.H{
 		"status":  "success",
 		"message": "aliash is up and running !",
@@ -33,6 +29,8 @@ func InstallHandler(c *gin.Context) {
 }
 
 func CreateAliasesHandler(c *gin.Context) {
+	c.Writer.Header().Set("Content-Type", "application/json")
+
 	var as Aliases
 
 	Must(c.BindJSON(&as))
@@ -62,8 +60,8 @@ func CreateAliasesHandler(c *gin.Context) {
 				"error": "An alias already exist for this title and this content",
 			})
 		} else {
-			as.Hash512 = ShaIt(as.Content)
-			as.Uid = TruncateText(slug.Make(as.Title), 7) + TruncateText(as.Hash512, 10)
+			as.Hash512 = ShaIt(as.Title + as.Content)
+			as.Uid = TruncateText(slug.Make(as.Title), 2) + "-" + TruncateText(as.Hash512, 5)
 			as.CreatedAt = time.Now()
 			as.UpdatedAt = time.Now()
 
@@ -75,7 +73,7 @@ func CreateAliasesHandler(c *gin.Context) {
 				c.JSON(http.StatusOK, gin.H{
 					"uid":        as.Uid,
 					"title":      as.Title,
-					"hash":       as.Hash512,
+					"hash":       TruncateText(as.Hash512, 4),
 					"created_at": as.CreatedAt,
 				})
 			}
@@ -86,12 +84,16 @@ func CreateAliasesHandler(c *gin.Context) {
 }
 
 func GetAllHandler(c *gin.Context) {
+	c.Writer.Header().Set("Content-Type", "application/json")
+
 	aliases := getAllAliases()
 
 	c.JSON(http.StatusOK, aliases)
 }
 
 func GetHandler(c *gin.Context) {
+	c.Writer.Header().Set("Content-Type", "application/json")
+
 	uid := c.Param("uid")
 
 	if len(uid) > 0 {

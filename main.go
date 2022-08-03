@@ -11,7 +11,7 @@ func main() {
 	router := gin.Default()
 
 	// routes
-	router.GET("/", InstallHandler)
+	router.GET("/i", InstallHandler)
 	router.POST("/new", CreateAliasesHandler)
 	router.GET("/:uid", GetHandler)
 	router.GET("/all", GetAllHandler)
