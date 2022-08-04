@@ -11,8 +11,10 @@ func main() {
 	router := gin.Default()
 
 	// routes
-	router.GET("/", InstallHandler)
-	router.GET("/:id", GetHandler)
+	router.GET("/i", InstallHandler)
+	router.POST("/new", CreateAliasesHandler)
+	router.GET("/:uid", GetHandler)
+	router.GET("/all", GetAllHandler)
 
 	router.Run("localhost:" + os.Getenv("PORT"))
 }

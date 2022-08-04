@@ -1,0 +1,31 @@
+// Default
+http://127.0.0.1:5000
+
+// Default buffer scope
+-fsSL
+--connect-timeout 10
+
+// Default headers
+Accept: **/**
+--
+
+--
+# to get the installation script
+GET /i
+
+--
+# to get all saved aliases
+GET /all
+
+--
+# to get the the saved alias 
+GET /we-9919f
+
+--
+Content-Type: application/json
+POST /new
+{
+  "title": "We apt update !",
+  "content": "sudo apt update -y\n"
+}
+
