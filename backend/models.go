@@ -31,10 +31,9 @@ type User struct {
 }
 
 type ProfileType struct {
-	Github  string `default:"github"`
-	Google  string `default:"google"`
-	Gitlab  string `default:"gitlab"`
-	CodePen string `default:"codepen"`
+	Github    string `default:"github"`
+	Bitbucket string `default:"bitbucket"`
+	Gitlab    string `default:"gitlab"`
 }
 
 type Profile struct {

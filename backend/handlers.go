@@ -78,9 +78,23 @@ func CreateAliasesHandler(c *gin.Context) {
 				})
 			}
 		}
-
 	}
+}
 
+func SearchHandler(c *gin.Context) {
+
+	searchText, status := c.GetQuery("q")
+
+	if !status {
+		c.JSON(http.StatusOK, gin.H{
+			"aliases": []string{},
+		})
+	} else {
+		aliases, err := searchAliases("title", searchText)
+		Must(err)
+
+		c.JSON(http.StatusOK, aliases)
+	}
 }
 
 func GetAllHandler(c *gin.Context) {

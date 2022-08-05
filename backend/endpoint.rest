@@ -18,6 +18,10 @@ GET /i
 GET /all
 
 --
+# to search for aliases from the search item
+GET /search?q=update
+
+--
 # to get the the saved alias 
 GET /we-9919f
 

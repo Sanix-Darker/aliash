@@ -11,6 +11,7 @@ import (
 
 var collection *mongo.Collection
 var ctx = context.TODO()
+var ctxB = context.Background()
 
 var MONGODB_URL = os.Getenv("MONGODB_URL")
 
@@ -53,7 +54,8 @@ func getAllAliases() []*Aliases {
 func filterAliasesBy(filter interface{}) ([]*Aliases, error) {
 	var aliases []*Aliases
 
-	cur, err := collection.Find(ctx, filter)
+	opts := options.Find().SetLimit(100)
+	cur, err := collection.Find(ctx, filter, opts)
 	if err != nil {
 		return aliases, err
 	}
@@ -80,4 +82,22 @@ func filterAliasesBy(filter interface{}) ([]*Aliases, error) {
 	}
 
 	return aliases, nil
+}
+
+func searchAliases(field, value string) ([]*Aliases, error) {
+	var aliases []*Aliases
+
+	query := bson.M{field: bson.M{"$regex": value, "$options": "im"}}
+	opts := options.Find().SetLimit(10)
+	cursor, err := collection.Find(ctx, query, opts)
+	if err != nil {
+		return aliases, err
+	}
+
+	// var sites []bson.M
+	if err = cursor.All(ctx, &aliases); err != nil {
+		return aliases, err
+	}
+
+	return aliases, err
 }
