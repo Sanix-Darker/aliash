@@ -30,7 +30,7 @@ GET /we-9919f
 Content-Type: application/json
 POST /new
 {
-  "title": "Install QEMU on ubuntu",
-  "content": "sudo apt update\nsudo install qemu"
+  "title": "Install VirtualBox on ubuntu",
+  "content": "sudo apt-get install virtualbox\n"
 }
 

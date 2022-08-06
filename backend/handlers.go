@@ -78,7 +78,7 @@ func CreateAliasesHandler(c *gin.Context) {
 			})
 		} else {
 			as.Hash512 = ShaIt(as.Title + as.Content)
-			as.Uid = TruncateText(slug.Make(as.Title), 2) + "-" + TruncateText(as.Hash512, 5)
+			as.Uid = TruncateText(slug.Make(as.Title), 2) + "-" + TruncateText(as.Hash512, 7)
 			as.CreatedAt = time.Now()
 			as.UpdatedAt = time.Now()
 
