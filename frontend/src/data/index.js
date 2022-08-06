@@ -1,6 +1,6 @@
-const HOST = process.env.HOST
-export const searchAliases = async (searchText) => {
+// const HOST = process.env.API_HOST_NAME
+const HOST = "http://127.0.0.1:5000"
+export const dataSearchAliases = async (searchText) => {
     const res = await fetch(`${HOST}/search?q=${searchText}`);
-    const result = res.json();
-    return result;
+    return await res.json();
 }

@@ -4,7 +4,6 @@ import Home from '../routes/home';
 import Profile from '../routes/profile';
 import './index.css'
 
-
 const containerStyle = {
     width: "70em",
     margin: "auto",
