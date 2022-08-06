@@ -23,13 +23,14 @@ GET /search?q=update
 
 --
 # to get the the saved alias 
+# in-30505
 GET /we-9919f
 
 --
 Content-Type: application/json
 POST /new
 {
-  "title": "We apt update !",
-  "content": "sudo apt update -y\n"
+  "title": "Install QEMU on ubuntu",
+  "content": "sudo apt update\nsudo install qemu"
 }
 

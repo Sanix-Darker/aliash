@@ -11,6 +11,23 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
+func CORSMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Credentials", "true")
+		c.Header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Header("Access-Control-Allow-Methods", "POST,HEAD,PATCH, OPTIONS, GET, PUT")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	}
+}
+
 func HomeHandler(c *gin.Context) {
 	c.Writer.Header().Set("Content-Type", "application/json")
 	c.JSON(http.StatusOK, gin.H{
@@ -87,11 +104,14 @@ func SearchHandler(c *gin.Context) {
 
 	if !status {
 		c.JSON(http.StatusOK, gin.H{
-			"aliases": []string{},
+			"aliases": []*Aliases{},
 		})
 	} else {
 		aliases, err := searchAliases("title", searchText)
 		Must(err)
+		if aliases == nil {
+			aliases = []*Aliases{}
+		}
 
 		c.JSON(http.StatusOK, aliases)
 	}
