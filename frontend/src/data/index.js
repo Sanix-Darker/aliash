@@ -1,6 +1,6 @@
-// const HOST = process.env.API_HOST_NAME
-const HOST = "http://127.0.0.1:5000"
+import env from '../../conf'
+
 export const dataSearchAliases = async (searchText) => {
-    const res = await fetch(`${HOST}/search?q=${searchText}`);
+    const res = await fetch(`${env.API_URL}/search?q=${searchText}`);
     return await res.json();
 }

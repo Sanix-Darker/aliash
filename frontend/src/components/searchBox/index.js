@@ -4,7 +4,6 @@ import {dataSearchAliases} from "../../data";
 import './style.css';
 
 
-
 const SearchItem = ({key, item}) => {
 
     return <Link href={`/details/${item.Uid}`}>

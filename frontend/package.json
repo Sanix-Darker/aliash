@@ -1,6 +1,7 @@
 {
   "private": true,
   "name": "aliash",
+  "description": "Search, host and use your aliases easily !",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
@@ -28,7 +29,6 @@
   },
   "dependencies": {
     "preact": "^10.10.1",
-    "preact-render-to-string": "^5.2.1",
     "preact-router": "^4.1.0"
   },
   "jest": {
