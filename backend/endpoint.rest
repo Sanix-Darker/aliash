@@ -30,7 +30,7 @@ GET /we-9919f
 Content-Type: application/json
 POST /new
 {
-  "title": "Install VirtualBox on ubuntu",
-  "content": "sudo apt-get install virtualbox\n"
+  "title": "Install i3 on ubuntu",
+  "content": "sudo apt-get install i3\n"
 }
 

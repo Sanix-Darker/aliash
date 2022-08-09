@@ -8,13 +8,14 @@ import (
 
 // Aliases isa raw alias defined by an uid and a raw_url where to fetch
 type Aliases struct {
-	ID        primitive.ObjectID `bson:"_id,omitempty"`
-	CreatedAt time.Time          `bson:"created_at"`
-	UpdatedAt time.Time          `bson:"updated_at"`
-	Title     string             `bson:"title,omitempty"`
-	Uid       string             `bson:"uid"`
-	Content   string             `bson:"content,omitempty"`
-	Hash512   string             `bson:"hash,omitempty"`
+	ID          primitive.ObjectID `bson:"_id,omitempty"`
+	CreatedAt   time.Time          `bson:"created_at"`
+	UpdatedAt   time.Time          `bson:"updated_at"`
+	Title       string             `bson:"title,omitempty"`
+	Uid         string             `bson:"uid"`
+	Content     string             `bson:"content,omitempty"`
+	Description string             `bson:"description"`
+	Hash512     string             `bson:"hash,omitempty"`
 }
 
 // Link define the link between analias an it user
