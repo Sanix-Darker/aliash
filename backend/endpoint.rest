@@ -24,7 +24,7 @@ GET /search?q=update
 --
 # to get the the saved alias 
 # in-30505
-GET /we-9919f
+GET /43a6
 
 --
 Content-Type: application/json

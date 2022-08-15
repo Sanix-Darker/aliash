@@ -1,21 +1,22 @@
 import { Link } from 'preact-router/match';
-import {useState} from "preact/hooks";
-import {dataSearchAliases} from "../../data";
-import './style.css';
+import { useState } from "preact/hooks";
+import { dataSearchAliases } from "../../data";
+import style from './style.css';
 
-
-const SearchItem = ({key, item}) => {
-
-    return <Link href={`/details/${item.Uid}`}>
-        <li key={key} className="item">{item?.Title}</li>
-    </Link>
-}
 
 const SearchListItem = ({searchList, query}) => {
 
     return searchList.length > 0 && query.length > 0 ? (
-            <div className="result-block">
-                <ul> {searchList.map((item, key) => <SearchItem key={key} item={item} />)} </ul>
+            <div class={style.result_block}>
+                <ul>
+                    {
+                        searchList.map((item, key) => (
+                            <Link key={key} class={style.basic_link} href={`/details/${item.Uid}`}>
+                                <li class={style.item}>{item?.Title}</li>
+                            </Link>
+                        ))
+                    }
+                </ul>
             </div>
     ): null
 }

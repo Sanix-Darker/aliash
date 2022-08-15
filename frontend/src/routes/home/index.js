@@ -7,8 +7,8 @@ const Home = () =>{
         <div class={style.home}>
             <h1>AliasHub</h1>
             <p>
-                Search, Host and use shell aliases related to
-                installations/settings for any unix OS.
+                Search, Host and Use shell aliases related to
+                installations/settings or configuration on unix OS.
             </p>
             <SearchBox />
         </div>
