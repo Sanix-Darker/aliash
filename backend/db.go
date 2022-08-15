@@ -11,13 +11,19 @@ import (
 
 var collection *mongo.Collection
 var ctx = context.TODO()
+var ctxB = context.Background()
 
 var MONGODB_URL = os.Getenv("MONGODB_URL")
-
 var DATABASE = os.Getenv("DATABASE")
+var MONGO_INITDB_ROOT_USERNAME = os.Getenv("MONGO_INITDB_ROOT_USERNAME")
+var MONGO_INITDB_ROOT_PASSWORD = os.Getenv("MONGO_INITDB_ROOT_PASSWORD")
 
 func init() {
-	clientOptions := options.Client().ApplyURI(MONGODB_URL)
+	credential := options.Credential{
+		Username: MONGO_INITDB_ROOT_USERNAME,
+		Password: MONGO_INITDB_ROOT_PASSWORD,
+	}
+	clientOptions := options.Client().ApplyURI(MONGODB_URL).SetAuth(credential)
 
 	client, err := mongo.Connect(ctx, clientOptions)
 	Must(err)
@@ -53,7 +59,8 @@ func getAllAliases() []*Aliases {
 func filterAliasesBy(filter interface{}) ([]*Aliases, error) {
 	var aliases []*Aliases
 
-	cur, err := collection.Find(ctx, filter)
+	opts := options.Find().SetLimit(100)
+	cur, err := collection.Find(ctx, filter, opts)
 	if err != nil {
 		return aliases, err
 	}
@@ -80,4 +87,22 @@ func filterAliasesBy(filter interface{}) ([]*Aliases, error) {
 	}
 
 	return aliases, nil
+}
+
+func searchAliases(field, value string) ([]*Aliases, error) {
+	var aliases []*Aliases
+
+	query := bson.M{field: bson.M{"$regex": value, "$options": "im"}}
+	opts := options.Find().SetLimit(10)
+	cursor, err := collection.Find(ctx, query, opts)
+	if err != nil {
+		return aliases, err
+	}
+
+	// var sites []bson.M
+	if err = cursor.All(ctx, &aliases); err != nil {
+		return aliases, err
+	}
+
+	return aliases, err
 }

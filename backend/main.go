@@ -9,12 +9,14 @@ import (
 func main() {
 
 	router := gin.Default()
+	router.Use(CORSMiddleware())
 
 	// routes
 	router.GET("/i", InstallHandler)
 	router.POST("/new", CreateAliasesHandler)
 	router.GET("/:uid", GetHandler)
-	router.GET("/all", GetAllHandler)
+	router.GET("/search", SearchHandler)
+	// router.GET("/all", GetAllHandler)
 
 	router.Run("localhost:" + os.Getenv("PORT"))
 }

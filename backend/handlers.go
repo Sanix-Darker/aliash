@@ -11,6 +11,23 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
+func CORSMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Credentials", "true")
+		c.Header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Header("Access-Control-Allow-Methods", "POST,HEAD,PATCH, OPTIONS, GET, PUT")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	}
+}
+
 func HomeHandler(c *gin.Context) {
 	c.Writer.Header().Set("Content-Type", "application/json")
 	c.JSON(http.StatusOK, gin.H{
@@ -48,6 +65,8 @@ func CreateAliasesHandler(c *gin.Context) {
 		})
 	} else {
 		as.Title = TruncateText(as.Title, 70)
+		// we truncate to 300 characters for the markdown description of the
+		as.Description = TruncateText(as.Description, 300)
 
 		// We should search for the same title and the content in the database
 		// and refuse to save if there is already something similar in the database
@@ -61,7 +80,7 @@ func CreateAliasesHandler(c *gin.Context) {
 			})
 		} else {
 			as.Hash512 = ShaIt(as.Title + as.Content)
-			as.Uid = TruncateText(slug.Make(as.Title), 2) + "-" + TruncateText(as.Hash512, 5)
+			as.Uid = TruncateText(slug.Make(as.Title), 2) + "-" + TruncateText(as.Hash512, 7)
 			as.CreatedAt = time.Now()
 			as.UpdatedAt = time.Now()
 
@@ -78,9 +97,26 @@ func CreateAliasesHandler(c *gin.Context) {
 				})
 			}
 		}
-
 	}
+}
 
+func SearchHandler(c *gin.Context) {
+
+	searchText, status := c.GetQuery("q")
+
+	if !status {
+		c.JSON(http.StatusOK, gin.H{
+			"aliases": []*Aliases{},
+		})
+	} else {
+		aliases, err := searchAliases("title", searchText)
+		Must(err)
+		if aliases == nil {
+			aliases = []*Aliases{}
+		}
+
+		c.JSON(http.StatusOK, aliases)
+	}
 }
 
 func GetAllHandler(c *gin.Context) {

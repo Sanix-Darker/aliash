@@ -18,14 +18,20 @@ GET /i
 GET /all
 
 --
+# to search for aliases from the search item
+GET /search?q=update
+
+--
 # to get the the saved alias 
-GET /we-9919f
+# in-30505
+GET /43a6
 
 --
 Content-Type: application/json
 POST /new
 {
-  "title": "We apt update !",
-  "content": "sudo apt update -y\n"
+  "title": "Install vagrant on Debian",
+  "content": "sudo apt-get install vagrant\n",
+  "description": "This is the description content as a markdown !"
 }
 
