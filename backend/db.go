@@ -14,11 +14,16 @@ var ctx = context.TODO()
 var ctxB = context.Background()
 
 var MONGODB_URL = os.Getenv("MONGODB_URL")
-
 var DATABASE = os.Getenv("DATABASE")
+var MONGO_INITDB_ROOT_USERNAME = os.Getenv("MONGO_INITDB_ROOT_USERNAME")
+var MONGO_INITDB_ROOT_PASSWORD = os.Getenv("MONGO_INITDB_ROOT_PASSWORD")
 
 func init() {
-	clientOptions := options.Client().ApplyURI(MONGODB_URL)
+	credential := options.Credential{
+		Username: MONGO_INITDB_ROOT_USERNAME,
+		Password: MONGO_INITDB_ROOT_PASSWORD,
+	}
+	clientOptions := options.Client().ApplyURI(MONGODB_URL).SetAuth(credential)
 
 	client, err := mongo.Connect(ctx, clientOptions)
 	Must(err)
