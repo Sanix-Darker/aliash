@@ -65,6 +65,9 @@ func CreateAliasesHandler(c *gin.Context) {
 		})
 	} else {
 		as.Title = TruncateText(as.Title, 70)
+		// we truncate to 300 characters for the markdown description of the
+		// alias
+		as.Description = TruncateText(as.Description, 300)
 
 		// We should search for the same title and the content in the database
 		// and refuse to save if there is already something similar in the database

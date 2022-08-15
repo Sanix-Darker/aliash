@@ -30,7 +30,8 @@ GET /43a6
 Content-Type: application/json
 POST /new
 {
-  "title": "Install i3 on ubuntu",
-  "content": "sudo apt-get install i3\n"
+  "title": "Install vagrant on Debian",
+  "content": "sudo apt-get install vagrant\n",
+  "description": "This is the description content as a markdown !"
 }
 

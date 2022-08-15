@@ -8,4 +8,4 @@
     - [ ] the result detail page
 - [ ] The oauth for github, gitlab and bitbucket.
 - [ ] Write tests for the backend and then the frontend
-- [ ] Add like and comments on some aliases
+- [ ] Add ratings and comments on aliases (this should be essential when searching...)
