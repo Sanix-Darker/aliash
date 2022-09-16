@@ -1,22 +1,22 @@
-# aliash
+## aliash-frontend
 
-## CLI Commands
 
+## HOW TO INSTALL
 ``` bash
 # install dependencies
-npm install
+make install
+```
 
-# serve with hot reload at localhost:8080
-npm run dev
+## HOW TO LAUNCH
+```
+# serve with hot reload at localhost:port
+make dev
 
 # build for production with minification
-npm run build
+make build
 
 # test the production build locally
-npm run serve
+make serve
 
 # run tests with jest and enzyme
 npm run test
-```
-
-For detailed explanation on how things work, checkout the [CLI Readme](https://github.com/developit/preact-cli/blob/master/README.md).
